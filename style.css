@@ -1,0 +1,73 @@
+/* Typography and Base */
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #fcebe3, #e6d6ce);
+  color: #4b2e2e;
+}
+
+/* Header Banner */
+.header-banner {
+  text-align: center;
+  background-color: #fff5ec;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.header-banner h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.header-banner p {
+  font-size: 1.1rem;
+  color: #6b4f4f;
+  margin: 0;
+}
+
+/* Image Layout */
+.image-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Aesthetic Image Cards */
+.image-container a img {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease-out forwards;
+  animation-delay: calc(0.1s * var(--i));
+}
+
+.image-container a img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 0.9rem;
+  color: #5c3d3d;
+  opacity: 0.8;
+}

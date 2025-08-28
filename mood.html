@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Mood Journal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body { background: #f3e5f5; }
+    .container {
+      max-width: 500px; margin:60px auto; padding:25px;
+      background:#fff; border-radius:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);
+      font-family:'Poppins',sans-serif; color:#4b2e2e; text-align:center;
+    }
+    .emojis { 
+      display:flex; 
+      justify-content:center; 
+      gap:15px; 
+      margin:20px 0; 
+      flex-wrap: wrap;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .emoji {
+      font-size: 2.4rem; 
+      cursor:pointer; 
+      transition: transform .2s, box-shadow .2s;
+      user-select: none;
+      padding: 6px;
+      border-radius: 12px;
+    }
+    .emoji:hover { 
+      transform: scale(1.3);
+      box-shadow: 0 0 8px rgba(180, 85, 150, 0.7);
+      background-color: #fff;
+    }
+    .entry { 
+      margin-top:20px; 
+      font-size:1.3rem; 
+      font-weight: 600;
+      color: #a71d2a;
+      min-height: 30px;
+    }
+    .back-btn { 
+      display:block; 
+      margin-top:30px; 
+      text-decoration:none; 
+      color:#4b2e2e; 
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    .back-btn:hover {
+      color: #b33939;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>😊 Mood Journal</h2>
+    <div class="emojis">
+      <span class="emoji" onclick="setMood('😀')" title="Happy">😀</span>
+      <span class="emoji" onclick="setMood('😁')" title="Beaming">😁</span>
+      <span class="emoji" onclick="setMood('😊')" title="Smiling">😊</span>
+      <span class="emoji" onclick="setMood('😇')" title="Blessed">😇</span>
+      <span class="emoji" onclick="setMood('😌')" title="Content">😌</span>
+      <span class="emoji" onclick="setMood('😐')" title="Neutral">😐</span>
+      <span class="emoji" onclick="setMood('😶')" title="Speechless">😶</span>
+      <span class="emoji" onclick="setMood('😔')" title="Sad">😔</span>
+      <span class="emoji" onclick="setMood('😢')" title="Crying">😢</span>
+      <span class="emoji" onclick="setMood('😭')" title="Sobbing">😭</span>
+      <span class="emoji" onclick="setMood('😡')" title="Angry">😡</span>
+      <span class="emoji" onclick="setMood('😤')" title="Frustrated">😤</span>
+      <span class="emoji" onclick="setMood('😱')" title="Shocked">😱</span>
+      <span class="emoji" onclick="setMood('🥰')" title="Loved">🥰</span>
+      <span class="emoji" onclick="setMood('😍')" title="In Love">😍</span>
+      <span class="emoji" onclick="setMood('🤗')" title="Hugging">🤗</span>
+      <span class="emoji" onclick="setMood('🤔')" title="Thinking">🤔</span>
+      <span class="emoji" onclick="setMood('😴')" title="Sleepy">😴</span>
+      <span class="emoji" onclick="setMood('🤩')" title="Excited">🤩</span>
+      <span class="emoji" onclick="setMood('😎')" title="Cool">😎</span>
+      <span class="emoji" onclick="setMood('😕')" title="Confused">😕</span>
+      <span class="emoji" onclick="setMood('🤐')" title="Secretive">🤐</span>
+      <span class="emoji" onclick="setMood('😬')" title="Nervous">😬</span>
+    </div>
+    <div class="entry" id="todayMood"></div>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </div>
+
+  <script>
+    const key = 'moodToday';
+    function render() {
+      const m = localStorage.getItem(key);
+      document.getElementById('todayMood').textContent =
+        m ? `Today's mood: ${m}` : 'Select your mood';
+    }
+    function setMood(emoji) {
+      localStorage.setItem(key, emoji);
+      render();
+    }
+    render();
+  </script>
+</body>
+</html>

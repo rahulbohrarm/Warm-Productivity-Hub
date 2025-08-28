@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Habit Tracker Calendar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(145deg, #fcebe3, #e6d6ce);
+      color: #4b2e2e;
+    }
+
+    .header-banner {
+      text-align: center;
+      background-color: #fff5ec;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    .header-banner h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #2e3a3f;
+      text-shadow: 1px 1px 3px rgba(46, 58, 63, 0.3);
+    }
+
+    .header-banner p {
+      font-size: 1.1rem;
+      color: #6b4f4f;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto 50px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      color: #4b2e2e;
+    }
+
+    /* Selectors container */
+    .selectors {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1.8px solid #b33939;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #fff5ec;
+      color: #4b2e2e;
+      transition: border-color 0.3s;
+    }
+    select:hover, select:focus {
+      border-color: #a71d2a;
+      outline: none;
+    }
+
+    .weekdays, .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+      user-select: none;
+    }
+
+    .weekdays div {
+      font-weight: 600;
+      color: #b33939;
+      font-size: 1rem;
+    }
+
+    .day {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #fff5ec;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #4b2e2e;
+      transition: background 0.3s, color 0.3s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .day:hover:not(.empty) {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    .day.done {
+      background: #a1e3a1;
+      color: #1b5e20;
+      box-shadow: 0 4px 15px rgba(27, 94, 32, 0.4);
+    }
+
+    .day.not-done {
+      background: #f8d7da;
+      color: #a71d2a;
+      box-shadow: 0 4px 15px rgba(167, 29, 42, 0.4);
+    }
+
+    .day.empty {
+      background: transparent;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    button#resetBtn {
+      background-color: #a71d2a;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s;
+      box-shadow: 0 4px 15px rgba(167, 29, 42, 0.5);
+      margin-top: 10px;
+    }
+
+    button#resetBtn:hover {
+      background-color: #d62e4b;
+      box-shadow: 0 6px 25px rgba(214, 46, 75, 0.7);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: #2e3a3f;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+    .back-btn:hover {
+      color: #5c3d3d;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #5c3d3d;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header-banner">
+    <h1>Habit Tracker</h1>
+    <p>Track your daily habits in a beautiful monthly calendar</p>
+  </header>
+
+  <main class="container">
+
+    <div class="selectors">
+      <select id="monthSelect" aria-label="Select Month"></select>
+      <select id="yearSelect" aria-label="Select Year"></select>
+    </div>
+
+    <div class="weekdays">
+      <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+
+    <div class="days" id="daysGrid"></div>
+
+    <button id="resetBtn">Reset</button>
+    <br />
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </main>
+
+  <footer>
+    &copy; 2025 Your Name. All rights reserved.
+  </footer>
+
+  <script>
+    const daysGrid = document.getElementById('daysGrid');
+    const resetBtn = document.getElementById('resetBtn');
+    const monthSelect = document.getElementById('monthSelect');
+    const yearSelect = document.getElementById('yearSelect');
+
+    // Month names array
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Populate month dropdown
+    months.forEach((m, i) => {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = m;
+      monthSelect.appendChild(option);
+    });
+
+    // Populate year dropdown (from 10 years ago to 10 years ahead)
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+      const option = document.createElement('option');
+      option.value = y;
+      option.textContent = y;
+      yearSelect.appendChild(option);
+    }
+
+    // Set default selected month and year to today
+    let selectedMonth = new Date().getMonth();
+    let selectedYear = currentYear;
+
+    monthSelect.value = selectedMonth;
+    yearSelect.value = selectedYear;
+
+    // Load done days from localStorage, key now includes month-year for separate storage
+    function getStorageKey(month, year) {
+      return `habitDone_${year}_${month}`;
+    }
+
+    let done = JSON.parse(localStorage.getItem(getStorageKey(selectedMonth, selectedYear))) || [];
+
+    function getDaysInMonth(year, month) {
+      return new Date(year, month + 1, 0).getDate();
+    }
+
+    function render() {
+      daysGrid.innerHTML = '';
+
+      const totalDays = getDaysInMonth(selectedYear, selectedMonth);
+      const firstDayIndex = new Date(selectedYear, selectedMonth, 1).getDay();
+
+      // Empty divs for alignment
+      for (let i = 0; i < firstDayIndex; i++) {
+        const emptyDiv = document.createElement('div');
+        emptyDiv.className = 'day empty';
+        daysGrid.appendChild(emptyDiv);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const div = document.createElement('div');
+        div.textContent = day;
+
+        if (done.includes(day)) {
+          div.className = 'day done';
+        } else {
+          div.className = 'day not-done';
+        }
+
+        div.onclick = () => toggle(day);
+        daysGrid.appendChild(div);
+      }
+    }
+
+    function toggle(day) {
+      if (done.includes(day)) {
+        done = done.filter(d => d !== day);
+      } else {
+        done.push(day);
+      }
+      localStorage.setItem(getStorageKey(selectedMonth, selectedYear), JSON.stringify(done));
+      render();
+    }
+
+    resetBtn.onclick = () => {
+      done = [];
+      localStorage.removeItem(getStorageKey(selectedMonth, selectedYear));
+      render();
+    };
+
+    // Update calendar when month or year changes
+    monthSelect.addEventListener('change', () => {
+      selectedMonth = parseInt(monthSelect.value);
+      done = JSON.parse(localStorage.getItem(getStorageKey(selectedMonth, selectedYear))) || [];
+      render();
+    });
+
+    yearSelect.addEventListener('change', () => {
+      selectedYear = parseInt(yearSelect.value);
+      done = JSON.parse(localStorage.getItem(getStorageKey(selectedMonth, selectedYear))) || [];
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>

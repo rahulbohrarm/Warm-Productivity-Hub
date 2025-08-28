@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pomodoro Timer</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #fde2e4; }
+    .container {
+      max-width: 350px; margin:80px auto; text-align:center;
+      background:#fff; padding:30px; border-radius:20px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.1); font-family:'Poppins',sans-serif;
+      color:#4b2e2e;
+    }
+    #display { font-size:3.5rem; margin:20px 0; }
+    .btn { padding:10px 20px; margin:5px; border:none; border-radius:10px; cursor:pointer; }
+    .work { background:#f19595; color:#fff; }
+    .break { background:#a1e3a1; color:#fff; }
+    .reset { background:#d88c9a; color:#fff; }
+    .back-btn { display:block; margin-top:30px; text-decoration:none; color:#4b2e2e; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🍅 Pomodoro</h2>
+    <div id="display">25:00</div>
+    <button class="btn work" onclick="startPomodoro()">Start</button>
+    <button class="btn reset" onclick="reset()">Reset</button>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </div>
+
+  <script>
+    let minutes = 25, seconds = 0, isWork = true, intervalId;
+    function render() {
+      document.getElementById('display').textContent =
+        `${String(minutes).padStart(2,'0')}:${String(seconds).padStart(2,'0')}`;
+    }
+    function tick() {
+      if (seconds === 0) {
+        if (minutes === 0) return switchMode();
+        minutes--; seconds = 59;
+      } else seconds--;
+      render();
+    }
+    function switchMode() {
+      clearInterval(intervalId);
+      isWork = !isWork;
+      minutes = isWork ? 25 : 5;
+      seconds = 0;
+      alert(isWork ? '🍅 Back to Work!' : '☕ Take a Break!');
+      render(); startPomodoro();
+    }
+    function startPomodoro() {
+      clearInterval(intervalId);
+      intervalId = setInterval(tick, 1000);
+    }
+    function reset() {
+      clearInterval(intervalId);
+      isWork = true; minutes = 25; seconds = 0; render();
+    }
+    render();
+  </script>
+</body>
+</html>

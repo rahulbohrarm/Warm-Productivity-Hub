@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Timer</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { background: #e8f5f2; }
+    .container {
+      max-width: 400px; margin: 80px auto;
+      background: #fff; padding: 30px; border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center;
+      font-family: 'Poppins', sans-serif; color: #2e3a3f;
+    }
+    #display {
+      font-size: 4rem; margin-bottom: 20px;
+    }
+    .btn {
+      padding: 10px 20px; margin: 5px;
+      border: none; border-radius: 10px;
+      cursor: pointer; font-weight: 600;
+    }
+    .start { background: #a1e3a1; }
+    .pause { background: #f2a5a5; }
+    .reset { background: #d88c9a; color: #fff; }
+    .back-btn { display: block; margin-top:30px; color:#2e3a3f; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>⏱️ Timer</h2>
+    <div id="display">00:00:00</div>
+    <button class="btn start" onclick="startTimer()">Start</button>
+    <button class="btn pause" onclick="pauseTimer()">Pause</button>
+    <button class="btn reset" onclick="resetTimer()">Reset</button>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </div>
+
+  <script>
+    let sec = 0, timerInterval;
+    function format(t) {
+      const h = String(Math.floor(t/3600)).padStart(2,'0');
+      const m = String(Math.floor((t%3600)/60)).padStart(2,'0');
+      const s = String(t%60).padStart(2,'0');
+      return `${h}:${m}:${s}`;
+    }
+    function render() {
+      document.getElementById('display').textContent = format(sec);
+    }
+    function startTimer() {
+      if (!timerInterval) {
+        timerInterval = setInterval(() => { sec++; render(); }, 1000);
+      }
+    }
+    function pauseTimer() {
+      clearInterval(timerInterval); timerInterval = null;
+    }
+    function resetTimer() {
+      pauseTimer(); sec = 0; render();
+    }
+    render();
+  </script>
+</body>
+</html>

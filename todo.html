@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fcebe3;
+      padding: 30px;
+      color: #4b2e2e;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff5ec;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    input {
+      width: 60%;
+      padding: 10px;
+      border: 1px solid #d3c0b5;
+      border-radius: 10px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      background: #d88c9a;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #fbe6dc;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      background-color: #f2a5a5;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #a1e3a1;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .status-label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      display: inline-block;
+      color: #4b2e2e;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 500px) {
+      input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📝 To-Do List</h2>
+    <input type="text" id="taskInput" placeholder="Add a new task..." />
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+    <a href="index.html" class="back-btn">← Back to Home</a>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function renderTasks() {
+      const list = document.getElementById("taskList");
+      list.innerHTML = "";
+
+      tasks.forEach((task, index) => {
+        const checked = task.status === "yes" ? "checked" : "";
+        const label = task.status === "yes" ? "Yes" : "No";
+
+        list.innerHTML += `
+          <li>
+            <span>${task.text}</span>
+            <div class="toggle-container">
+              <label class="switch">
+                <input type="checkbox" onchange="toggleStatus(${index})" ${checked}>
+                <span class="slider"></span>
+              </label>
+              <span class="status-label" id="label-${index}">${label}</span>
+              <button onclick="removeTask(${index})">❌</button>
+            </div>
+          </li>`;
+      });
+    }
+
+    function addTask() {
+      const input = document.getElementById("taskInput");
+      const value = input.value.trim();
+      if (value) {
+        tasks.push({ text: value, status: "no" });
+        input.value = "";
+        saveTasks();
+      }
+    }
+
+    function removeTask(index) {
+      tasks.splice(index, 1);
+      saveTasks();
+    }
+
+    function toggleStatus(index) {
+      tasks[index].status = tasks[index].status === "yes" ? "no" : "yes";
+      saveTasks();
+    }
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    renderTasks();
+  </script>
+</body>
+</html>
